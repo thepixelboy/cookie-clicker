@@ -12,3 +12,6 @@ item_ids = [item.get_attribute("id") for item in items]
 
 timeout = time.time() + 5
 game_time = time.time() + 60 * 5  # 5minutes
+
+while True:
+    cookie.click()
