@@ -15,3 +15,8 @@ game_time = time.time() + 60 * 5  # 5minutes
 
 while True:
     cookie.click()
+
+    if time.time() > game_time:
+        cookies_per_second = driver.find_element_by_id("cps").text
+        print(cookies_per_second)
+        break
