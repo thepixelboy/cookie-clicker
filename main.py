@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.common.exceptions import StaleElementReferenceException
 import time
 
 chrome_driver_path = "/Users/ruben/Development/chromedriver"
@@ -17,10 +18,23 @@ while True:
     cookie.click()
 
     if time.time() > timeout:
-        pass
+        current_money = int("".join(driver.find_element_by_id("money").text.split(",")))
+        access = driver.find_elements_by_css_selector("#store b")
+        upgrades = [
+            {"id": f"buy{i.text.split('-')[0].strip()}", "price": int("".join(i.text.split("-")[1].strip().split(",")))}
+            for i in access[:-1]
+        ]
+
+        for item in upgrades[::-1]:
+            if item["price"] < current_money:
+                buy = driver.find_element_by_id(item["id"])
+                buy.click()
+                break
+
+        timeout = time.time() + 5
 
     if time.time() > game_time:
         break
 
 cookies_per_second = driver.find_element_by_id("cps").text
-print(cookies_per_second)
+print(f"Cookies per second: {cookies_per_second}")
